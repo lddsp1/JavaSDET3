@@ -11,6 +11,7 @@ public class ContactPage extends WebBasePage {
     By addMember=By.linkText("添加成员");
     By username=By.name("username");
     By delete=By.linkText("删除");
+    By addMenu = By.xpath("//i[@class='member_colLeft_top_addBtn']/parent::a");
 
     public ContactPage(RemoteWebDriver driver) {
         super(driver);
@@ -47,6 +48,7 @@ public class ContactPage extends WebBasePage {
     }
 
     public ContactPage search(String keyword){
+        click(By.xpath("//a[text()='组织架构']"));
         sendKeys(By.id("memberSearchInput"), keyword);
 //        driver.findElement(By.id("memberSearchInput")).sendKeys(keyword);
 //        new WebDriverWait(driver, Duration.ofSeconds(10))
@@ -57,6 +59,15 @@ public class ContactPage extends WebBasePage {
     public String getUserName(){
         return driver.findElement(By.cssSelector(".member_display_cover_detail_name")).getText();
     }
+
+    public String getTagName(){
+        return driver.findElement(By.cssSelector(".js_search_item_name")).getText();
+    }
+
+    public String getdepartName(){
+        return driver.findElement(By.xpath("//li[@class='ww_searchResult_item_Curr']/a")).getText();
+    }
+
 
     public ContactPage delete(){
         click(delete);
@@ -91,6 +102,41 @@ public class ContactPage extends WebBasePage {
         click(By.linkText("导入"));
         click(By.linkText("完成"));
 
+        return this;
+    }
+
+    public ContactPage addDepart(String partName, String blTo){
+        String xpath = "//div[@class='inputDlg_item']//a[text()=\""+blTo+"\"]";
+           click(addMenu);
+       // click(By.linkText("添加部门"));
+
+     //   while (driver.findElementsByLinkText("添加部门").size()==0)
+         //   click(addMenu);
+        click(By.cssSelector(".js_create_party"));
+        sendKeys(By.name("name"),partName);
+        click(By.cssSelector("div.inputDlg_item:nth-child(3) > a"));
+        click(By.xpath(xpath));
+        //sendKeys(By.cssSelector("div.inputDlg_item:nth-child(3) > a"), blTo);
+        ///html/body/div[3]/div/div[2]/div/form/div[3]/div/div/ul/li/a
+        click(By.xpath("//a[@d_ck='submit']"));
+        return this;
+    }
+
+    /**
+     * 添加标签tag
+     * @param tagName
+     * @param useName
+     * @return
+     */
+    public ContactPage addTag(String tagName, String useName){
+        click(By.linkText("标签"));
+        while (driver.findElements(By.xpath("//*[text()='标签名称 ']")).size()==0){
+            click(By.cssSelector(".member_colLeft_top_addBtnWrap"));
+        }
+        sendKeys(By.name("name"), tagName);
+        click(By.cssSelector("form a.qui_btn"));
+        click(By.xpath("//a[text()='"+useName+"']"));
+        click(By.linkText("确定"));
         return this;
     }
 }

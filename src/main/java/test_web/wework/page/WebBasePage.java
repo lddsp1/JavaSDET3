@@ -41,8 +41,16 @@ public class WebBasePage extends BasePage {
         driver.findElement(by).click();
     }
 
+    public void clickl(By by){
+        //todo: 异常处理
+        wait.until(ExpectedConditions.elementToBeClickable(by));
+        driver.findElement(by).click();
+    }
+
+
     public void sendKeys(By by, String content){
         wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+        driver.findElement(by).clear();
         driver.findElement(by).sendKeys(content);
     }
 
